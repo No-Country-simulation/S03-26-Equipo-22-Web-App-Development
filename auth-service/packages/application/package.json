@@ -1,0 +1,21 @@
+{
+  "name": "@repo/application",
+  "type": "module",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc"
+  },
+  "exports": {
+    "./interfaces": {
+      "types": "./src/interfaces/index.ts",
+      "default": "./dist/interfaces/index.js"
+    },
+    "./use-cases": {
+      "types": "./src/use-cases/index.ts",
+      "default": "./dist/use-cases/index.js"
+    }
+  },
+  "dependencies": {
+    "@repo/domain": "*"
+  }
+}
