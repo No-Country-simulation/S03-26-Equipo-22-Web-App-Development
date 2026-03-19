@@ -1,0 +1,17 @@
+{
+  "name": "@repo/infrastructure",
+  "type": "module",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc"
+  },
+  "exports": {
+    "./persistence": {
+      "types": "./src/persistence/index.ts",
+      "default": "./dist/persistence/index.js"
+    }
+  },
+  "dependencies": {
+    "@repo/application": "*"
+  }
+}
