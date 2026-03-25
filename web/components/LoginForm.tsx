@@ -10,7 +10,7 @@ import {Card, CardContent,CardDescription, CardFooter, CardHeader,CardTitle} fro
 import { Field,FieldGroup,FieldLabel,FieldError } from "./ui/field";
 import { Input } from "./ui/input";
 import SubmitButton from "./SubmitButton";
-
+import { useAuth } from "@/app/hooks/useAuth";
 
 
 function LoginForm(){
@@ -23,10 +23,37 @@ function LoginForm(){
         }
 
     })
+    const {login,isLoading} = useAuth();
+    
+    async function onSubmit(data: z.infer<typeof loginSchema>) {
+       
+        try{
+            const res = await login(data);
+            console.log(res);
+            //come back to redirect.
+            // // const res = await fetch("/api/login", {
+                // // method: "POST",
+                // // headers: {
+                    // // "Content-Type": "application/json"
+                // // },
+                
+                // // body: JSON.stringify(data)
+            // // });
 
-    function onSubmit(data: z.infer<typeof loginSchema>) {
-        console.log("hello");
-       //Volver a esto despues toast("Login attempt successful")
+            // // const result = await res.json();
+
+            if(!res.ok){
+                toast.error(res.error)
+                console.log(res.error);
+            }
+            toast.success("Login Successful");
+            
+            
+        }catch(error){
+            toast.error("Login failed, Please try again.")
+            console.log
+        }
+       
        form.reset();
     }
 

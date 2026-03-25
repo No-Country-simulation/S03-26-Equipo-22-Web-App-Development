@@ -1,4 +1,3 @@
-
 "use client"
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,6 +12,7 @@ import { Input } from "./ui/input";
 import { InputGroup, InputGroupAddon, InputGroupText } from "./ui/input-group";
 import { Checkbox } from "./ui/checkbox";
 import SubmitButton from "./SubmitButton";
+import { useAuth } from "@/app/hooks/useAuth";
 function RegisterForm(){
 
     const form = useForm<registerFormType>({
@@ -27,9 +27,25 @@ function RegisterForm(){
         }
     })
 
-    function onSubmit(data: z.infer<typeof registerSchema>){
+    const {register, isLoading} = useAuth();
+
+    async function onSubmit(data: z.infer<typeof registerSchema>){
        
-       
+        try{
+            
+            const res = await register(data)
+
+            if(!res.ok){
+                toast.error(res.error)
+                console.log(res.error);
+            }
+            toast.success("Registration Successful");
+            // redirect to new user dashboard?
+            //implement isLoading!!!
+            
+        }catch(err){
+             toast.error("Registration failed, Please try again.")
+        }
 
         
 
