@@ -1,304 +1,220 @@
-# Arquitectura de la plataforma
+# Testimonial CMS
 
-Este repositorio contiene los distintos servicios que conforman la plataforma.
-La arquitectura está basada en **servicios separados por dominio** y un **Backend For Frontend (BFF)** para la aplicación web.
+Aplicación web para gestión de testimonios con panel administrativo, autenticación por roles, analíticas y sistema de embebido para terceros.
 
-El objetivo de esta arquitectura es:
+El repositorio está dividido en dos apps principales:
 
-- Separar responsabilidades entre dominios.
-- Permitir que distintos equipos trabajen en paralelo.
-- Facilitar la escalabilidad del sistema.
-- Mantener independencia tecnológica entre servicios.
+- `web`: frontend en Next.js.
+- `backend`: API en NestJS con PostgreSQL.
 
----
+## Stack
 
-# Repository Structure
+- Frontend: Next.js 16, React 19, TypeScript
+- Backend: NestJS 11, TypeORM, PostgreSQL
+- Validación: `class-validator` + `class-transformer`
+- Documentación API: Swagger
+- Seguridad: JWT, Helmet, CORS, Throttling
+- Media: Cloudinary
+- Email: Resend
 
-```
-apps/
- ├ web
- ├ auth-service
- └ testimonial-service
-```
+## Estructura del proyecto
 
-Cada proyecto tiene una responsabilidad específica dentro del sistema.
-
----
-
-# 1. Web (Next.js)
-
-**Ubicación**
-
-```
-/web
-```
-
-**Tecnología**
-
-- Next.js
-- App Router
-
-**Rol en la arquitectura**
-
-Este proyecto actúa como:
-
-- **Frontend principal de la plataforma**
-- **Backend For Frontend (BFF)**
-
-El BFF funciona como una capa intermedia entre el frontend y los servicios internos.
-
-**Responsabilidades**
-
-- Renderizar la interfaz de usuario.
-- Manejar la sesión del usuario.
-- Consumir APIs internas.
-- Componer datos provenientes de múltiples servicios.
-- Simplificar la lógica del frontend.
-- Widgets embebidos
-
-**Importante**
-
-El frontend **no consume directamente los microservicios**.
-Todas las llamadas pasan por el BFF.
-
----
-
-# 2. Auth Service
-
-**Ubicación**
-
-```
-/auth-service
+```text
+.
+├── backend
+│   ├── src
+│   │   └── modules
+│   │       ├── analytics
+│   │       ├── auth
+│   │       ├── categories
+│   │       ├── config
+│   │       ├── database
+│   │       ├── email
+│   │       ├── embed
+│   │       ├── media
+│   │       ├── moderation
+│   │       ├── tags
+│   │       ├── testimonials
+│   │       └── users
+│   └── test
+└── web
+    ├── app
+    └── public
 ```
 
-**Tecnología**
+## Funcionalidades principales
 
-- NestJS
-- Turborepo (monorepo interno)
+- Login y autenticación con JWT
+- Roles de usuario (`ADMIN`, `EDITOR`)
+- Gestión de usuarios
+- Gestión de categorías y tags
+- Creación, edición, moderación y publicación de testimonios
+- Carga de imágenes y manejo de media
+- Invitaciones para completar testimonios
+- Analytics por testimonial y métricas globales
+- API pública para widgets embebidos con API Keys
+- Documentación Swagger
 
-**Rol en la arquitectura**
+## Requisitos
 
-Este servicio es responsable de **identidad, autenticación y gestión de tenants**.
+- Node.js 20 o superior
+- `pnpm`
+- PostgreSQL
 
-Centraliza toda la lógica relacionada con cuentas de usuario y acceso al sistema.
+## Instalación
 
-**Responsabilidades**
+Instalar dependencias del backend:
 
-- Registro de usuarios
-- Login
-- Gestión de sesiones
-- Autenticación
-- Gestión de tenants
-- Gestión de roles y permisos
-- (Futuro) Suscripciones y billing
-
-**Arquitectura interna**
-
-El servicio utiliza una estructura basada en capas:
-
-```
-auth-service/
- ├ apps/
- │   └ web-api
- │
- └ packages/
-     ├ domain
-     ├ application
-     └ infrastructure
+```bash
+cd backend
+pnpm install
 ```
 
-### Packages
+Instalar dependencias del frontend:
 
-**Domain**
-
-Contiene la lógica de negocio pura:
-
-- Entidades
-- Value Objects
-- Reglas de negocio
-- Interfaces de repositorios
-
-No depende de ninguna tecnología externa.
-
----
-
-**Application**
-
-Contiene los **casos de uso** de la aplicación.
-
-Ejemplos:
-
-- RegisterUser
-- LoginUser
-- CreateTenant
-
-Orquesta el dominio pero no implementa detalles técnicos.
-
----
-
-**Infrastructure**
-
-Implementaciones técnicas necesarias para ejecutar la aplicación.
-
-Ejemplos:
-
-- Repositorios de base de datos
-- Integraciones externas
-- Adaptadores de persistencia
-
----
-
-### App
-
-**web-api**
-
-Aplicación NestJS que expone la API HTTP del servicio.
-
-Es responsable de:
-
-- Controladores
-- DTOs
-- Middleware
-- Integración con las capas internas
-
----
-
-# 3. Testimonial Service
-
-**Ubicación**
-
-```
-/testimonial-service
+```bash
+cd web
+pnpm install
 ```
 
-**Tecnología**
+## Variables de entorno
 
-- .NET 8
-- ASP.NET Core
+El backend usa variables de entorno para base de datos, JWT y servicios externos.
 
-**Rol en la arquitectura**
+Variables mínimas requeridas:
 
-Este servicio contiene el **dominio principal del producto**: la gestión de testimonios.
+```env
+NODE_ENV=development
+PORT=3001
 
-Se encarga de toda la lógica relacionada con:
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_NAME=testimonial_cms
 
-- creación de testimonios
-- almacenamiento
-- procesamiento de archivos
-
----
-
-**Responsabilidades**
-
-- Creación y gestión de testimonios
-- Subida de archivos
-- Procesamiento de contenido (imágenes, videos, etc.)
-
----
-
-**Arquitectura interna**
-
-El servicio utiliza una arquitectura en capas basada en **Clean Architecture**.
-
-```
-testimonial-service/
- ├ Domain
- ├ Application
- ├ Infrastructure
- └ WebApi
+JWT_SECRET=super-secret
+JWT_EXPIRATION=7d
 ```
 
-### Domain
+Variables opcionales usadas por el proyecto:
 
-Contiene:
+```env
+JWT_REFRESH_SECRET=refresh-secret
 
-- Entidades
-- Value Objects
-- Reglas de negocio
-- Interfaces de repositorios
+FRONTEND_URL=http://localhost:3000
 
-No depende de frameworks.
+EMAIL_USER=
+EMAIL_PASSWORD=
 
----
-
-### Application
-
-Contiene:
-
-- Casos de uso
-- Servicios de aplicación
-- Interfaces necesarias para ejecutar los flujos del sistema
-
----
-
-### Infrastructure
-
-Implementaciones técnicas como:
-
-- Persistencia
-- Integraciones externas
-- Adaptadores
-
----
-
-### WebApi
-
-Aplicación ASP.NET Core que expone la API HTTP del servicio.
-
-Responsable de:
-
-- Controllers
-- DTOs
-- Middleware
-- Configuración de dependencias
-
----
-
-# Arquitectura General
-
-La comunicación entre los componentes se realiza de la siguiente forma:
-
-```
-Browser
-   │
-   ▼
-Next.js (BFF)
-   │
-   ├── Auth Service
-   │
-   └── Testimonial Service
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
 ```
 
-El **BFF centraliza las llamadas a los servicios internos** y simplifica la interacción del frontend con el backend.
+Nota: el proyecto también integra `Resend` y otras configuraciones de email/media. Si vas a probar flujos reales de correo o archivos, revisá las implementaciones en [email.service.ts](/home/linux/Documentos/Github/S03-26-Equipo-22-Web-App-Development/backend/src/modules/email/email.service.ts) y [media.service.ts](/home/linux/Documentos/Github/S03-26-Equipo-22-Web-App-Development/backend/src/modules/media/media.service.ts).
 
----
+## Ejecutar en desarrollo
 
-# Embedded Widgets
+Backend:
 
-Los widgets de testimonios que se integran en sitios externos **no pasan por el BFF**.
-
-Flujo:
-
-```
-Website cliente
-       │
-       ▼
-BFF (Next.js)
-       │
-       ▼
-Testimonial Service
+```bash
+cd backend
+pnpm start:dev
 ```
 
----
+Frontend:
 
-# Guiding Principles
+```bash
+cd web
+pnpm dev
+```
 
-Este repositorio sigue los siguientes principios:
+URLs locales por defecto:
 
-- Separación clara de dominios.
-- Independencia entre servicios.
-- Arquitectura basada en capas.
-- Escalabilidad horizontal.
-- Facilidad para trabajo en equipo.
+- Frontend: `http://localhost:3000`
+- Backend: `http://localhost:3001`
+- Swagger: `http://localhost:3001/api/docs`
 
----
+## Scripts útiles
+
+Backend:
+
+```bash
+pnpm build
+pnpm start
+pnpm start:dev
+pnpm start:prod
+pnpm test
+pnpm test:e2e
+pnpm lint
+```
+
+Frontend:
+
+```bash
+pnpm dev
+pnpm build
+pnpm start
+pnpm lint
+```
+
+## Módulos del backend
+
+- `auth`: login, refresh token, recuperación de contraseña, invitación de editores
+- `users`: administración de usuarios y categorías asignadas
+- `testimonials`: creación y ciclo de vida de testimonios
+- `moderation`: revisión, aprobación y rechazo
+- `categories`: categorías de testimonios
+- `tags`: etiquetas
+- `media`: subida y gestión de archivos
+- `analytics`: registro de eventos y reportes
+- `embed`: API keys y endpoints públicos para widgets embebidos
+
+## Endpoints destacados
+
+- `POST /auth/login`
+- `GET /auth/profile`
+- `POST /testimonials/invitations`
+- `POST /testimonials/invitations/:token/complete`
+- `POST /analytics`
+- `GET /analytics/events`
+- `GET /embed/testimonials`
+- `GET /embed/script.js`
+
+La referencia completa de endpoints está disponible en Swagger:
+
+```text
+/api/docs
+```
+
+## Seguridad y validaciones
+
+- Validación global con `ValidationPipe`
+- Sanitización por `whitelist`
+- Rechazo de propiedades no permitidas con `forbidNonWhitelisted`
+- Conversión automática de tipos en DTOs
+- Protección HTTP con `helmet`
+- CORS configurable
+- Rate limiting con `@nestjs/throttler`
+
+## Estado actual
+
+Actualmente el backend compila correctamente con:
+
+```bash
+cd backend
+pnpm build
+```
+
+## Posibles siguientes mejoras
+
+- Agregar `.env.example` para backend y frontend
+- Documentar flujo de base de datos y migraciones
+- Documentar despliegue en Render/Vercel
+- Agregar capturas del frontend
+- Unificar README raíz con los README internos de `backend` y `web`
+
+## Equipo
+
+Proyecto desarrollado para el equipo `S03-26-Equipo-22-Web-App-Development`.
