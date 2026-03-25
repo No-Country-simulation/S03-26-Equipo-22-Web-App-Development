@@ -207,13 +207,6 @@ cd backend
 pnpm build
 ```
 
-## Posibles siguientes mejoras
-
-- Agregar `.env.example` para backend y frontend
-- Documentar flujo de base de datos y migraciones
-- Documentar despliegue en Render/Vercel
-- Agregar capturas del frontend
-- Unificar README raíz con los README internos de `backend` y `web`
 
 ## Equipo
 
