@@ -30,17 +30,17 @@ function LoginForm(){
         try{
             const res = await login(data);
             console.log(res);
-            //come back to redirect.
-            // // const res = await fetch("/api/login", {
-                // // method: "POST",
-                // // headers: {
-                    // // "Content-Type": "application/json"
-                // // },
-                
-                // // body: JSON.stringify(data)
-            // // });
+          
+          
+          
+          
+          
+          
+          
+          
+          
 
-            // // const result = await res.json();
+          
 
             if(!res.ok){
                 toast.error(res.error)
@@ -66,7 +66,7 @@ function LoginForm(){
             </CardHeader>
 
             <CardContent>
-                <form id="loginFormVisual" onSubmit={form.handleSubmit(onSubmit)}>
+                <form id="loginFormVisual" >
                     <FieldGroup>
                         <Controller name="username" control={form.control} 
                         render ={({field, fieldState}) => (
@@ -99,7 +99,7 @@ function LoginForm(){
             </CardContent>
             <CardFooter>
                 <Field orientation="horizontal">
-                        <SubmitButton formName="loginFormVisual"></SubmitButton>
+                        <button type="submit"></button>
                 </Field>
             </CardFooter>
         </Card>
