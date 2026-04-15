@@ -45,6 +45,8 @@ export function TestimonialSubmissionForm(){
                         </Field>
 
                     </FieldGroup>
+
+                    <Button type="submit" variant="ghost">Submit</Button>
                 </form>
             </CardContent>
         </Card>

@@ -3,12 +3,14 @@ import { testimonialSubmissionFormState,testimonialUserAdditionFormState } from 
 import z from 'zod'
 export async function TestimonialSubmission(state: testimonialSubmissionFormState,  formData: FormData){
 
+        console.log(formData);
+
     const validSubmission = testimonialSubmissionFormSchema.safeParse(
         {
             author: formData.get('author'),
-            images: formData.get('images'),
-            editors: formData.get('editors'),
-            videos: formData.get('videos')
+            images: formData.getAll('images'),
+            editors: formData.getAll('editors'),
+            videos: formData.getAll('videos')
             
         
         }

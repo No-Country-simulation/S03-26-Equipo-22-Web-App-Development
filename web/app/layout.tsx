@@ -38,10 +38,14 @@ export default function RootLayout({
           <HeaderNav></HeaderNav>
           
         <SidebarProvider>
-          <div className="flex"><UserSidebar></UserSidebar></div>
+          <div className="flex w-full">
+            
+            <UserSidebar></UserSidebar>
+            <main className="flex-1 p-6">{children}</main>
+          </div>
           
           
-          {children}
+          
         </SidebarProvider>
         
         
