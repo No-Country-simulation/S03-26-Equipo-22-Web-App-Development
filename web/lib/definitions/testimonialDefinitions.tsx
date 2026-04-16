@@ -53,3 +53,38 @@ export type testimonialUserAdditionFormState = | {
     }
     message?: string
 } | undefined
+
+
+
+//Updating pre-existing testimonial
+
+export const testimonialUpdateFormSchema = z.object({
+    images: z.array(z.url().refine(
+        url => isAllowedDomain(url), {message: "Invalid Image Domain."})).max(20).nonempty(),
+    editors: z.array(z.string().min(6).max(20)).max(20),
+    videos: z.array(z.url().refine(url => isAllowedVideoDomain(url), {message: "Invalid video source."})).max(5),
+
+
+
+
+
+})
+
+
+export type testimonialUpdateFormType = z.infer<typeof testimonialUpdateFormSchema>;
+
+
+export type testimonialUpdateFormState = | {
+
+
+    errors?: {
+        
+        images?: string[],
+        editors?: string[],
+        videos?: string[],
+
+
+    }
+    message?: string
+} | undefined
+

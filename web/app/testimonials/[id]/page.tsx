@@ -22,6 +22,7 @@ type Testimonial = {
   editors: string[];
   description: string;
   images: ImageItem[];
+  videos: VideoItem[];
 };
 
 export default async function TestimonialPage({ params }: { params: Promise<{ tag: string }> }){

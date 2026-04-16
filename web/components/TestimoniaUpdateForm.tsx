@@ -1,6 +1,6 @@
 'use client'
 import { useActionState, useState } from "react";
-import { TestimonialSubmission } from "@/app/actions/testimonials";
+import { TestimonialUpdateFormSubmission } from "@/app/actions/testimonials";
 
 
 import {Card, CardContent,CardDescription, CardFooter, CardHeader,CardTitle} from '@/components/ui/card'
@@ -18,17 +18,25 @@ const isValidUrl = (string: string) => {
     }
 }
 
-export function TestimonialSubmissionFormBeta(){
-    
-    const [state,action,pending] = useActionState(TestimonialSubmission, undefined)
+type TestimonialFormProps = {
+  id: string
+  initialEditors: string[];
+  initialImages: string[];
+  initialVideos: string[];
+};
 
-    const [editors, setEditors] = useState<string[]>([])
+
+export function TestimonialUpdateForm({ initialEditors = [], initialImages = [], initialVideos = [], }: TestimonialFormProps){
+    
+    const [state,action,pending] = useActionState(TestimonialUpdateFormSubmission, undefined)
+
+    const [editors, setEditors] = useState<string[]>(initialEditors || [])
     
     
-    const [images, setImages] = useState<string[]>([])
+    const [images, setImages] = useState<string[]>(initialImages || [])
     
     
-    const [videos, setVideos] = useState<string[]>([])
+    const [videos, setVideos] = useState<string[]>(initialVideos || [])
 
     return(
 
@@ -37,8 +45,8 @@ export function TestimonialSubmissionFormBeta(){
 
 
             <CardHeader>
-                <CardTitle>Testimonial Submission Form</CardTitle>
-            <   CardDescription>A form for submitting testimonials for consideration</CardDescription>
+                <CardTitle>Editing Testimonial</CardTitle>
+            <   CardDescription>A Form for editing your testimonials</CardDescription>
             </CardHeader>
 
 
