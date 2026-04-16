@@ -26,7 +26,7 @@ type TestimonialFormProps = {
 };
 
 
-export function TestimonialUpdateForm({ initialEditors = [], initialImages = [], initialVideos = [], }: TestimonialFormProps){
+export function TestimonialUpdateForm({ initialEditors = [], initialImages = [], initialVideos = [], id }: TestimonialFormProps){
     
     const [state,action,pending] = useActionState(TestimonialUpdateFormSubmission, undefined)
 
@@ -76,7 +76,7 @@ export function TestimonialUpdateForm({ initialEditors = [], initialImages = [],
                         
                             {state?.errors?.videos && <FieldError >{state.errors.videos}</FieldError>}
                         
-
+                        <input type="hidden" name="id" value={id} />
 
                     </FieldGroup>
                     <Button type="submit" variant="ghost">Submit</Button>

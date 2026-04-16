@@ -59,6 +59,7 @@ export type testimonialUserAdditionFormState = | {
 //Updating pre-existing testimonial
 
 export const testimonialUpdateFormSchema = z.object({
+    id: z.string(),
     images: z.array(z.url().refine(
         url => isAllowedDomain(url), {message: "Invalid Image Domain."})).max(20).nonempty(),
     editors: z.array(z.string().min(6).max(20)).max(20),
@@ -78,7 +79,7 @@ export type testimonialUpdateFormState = | {
 
 
     errors?: {
-        
+        id: string
         images?: string[],
         editors?: string[],
         videos?: string[],

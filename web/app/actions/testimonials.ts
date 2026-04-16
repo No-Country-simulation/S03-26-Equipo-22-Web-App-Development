@@ -72,7 +72,7 @@ export async function TestimonialUpdateFormSubmission(state: testimonialSubmissi
       console.log(formData);
          const validSubmission = testimonialUpdateFormSchema.safeParse(
              {
-                 author: formData.get('author'),
+                 id: formData.get('id'),
                  images: formData.getAll('images'),
                  editors: formData.getAll('editors'),
                  videos: formData.getAll('videos')
@@ -87,10 +87,10 @@ export async function TestimonialUpdateFormSubmission(state: testimonialSubmissi
            }
             }
 
-            const { images, editors, videos} = validSubmission.data;
+            const { id, images, editors, videos} = validSubmission.data;
 
             try{
-    const res = await fetch(`${process.env.NEST_API_URL}/testimonial/submit`,{
+    const res = await fetch(`${process.env.NEST_API_URL}/testimonial/${id}`,{
         method: "PATCH",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({ images, editors, videos})
