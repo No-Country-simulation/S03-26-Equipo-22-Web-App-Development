@@ -96,7 +96,7 @@ export function ListFieldManager({label, description,placeholder,items,onAdd,onR
                             key={index}
                             className="flex items-center gap-1 bg-secondary px-2 py-1 rounded-md text-sm"
                         >
-                            <span className="max-w-[200px] truncate">{item}</span>
+                            <span className="max-w-50 truncate">{item}</span>
                             <button
                                 type="button"
                                 onClick={() => onRemove(index)}

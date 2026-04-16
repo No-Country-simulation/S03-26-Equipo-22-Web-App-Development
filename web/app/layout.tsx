@@ -4,6 +4,7 @@ import "./globals.css";
 import UserSidebar from "@/components/UserSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { ThemeProvider } from "@/components/Theme-Provider";
+import { Toaster } from "@/components/ui/sonner"
 import HeaderNav from "@/components/HeaderNav";
 
 const geistSans = Geist({
@@ -42,6 +43,7 @@ export default function RootLayout({
             
             <UserSidebar></UserSidebar>
             <main className="flex-1 p-6">{children}</main>
+            <Toaster />
           </div>
           
           

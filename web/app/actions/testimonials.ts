@@ -42,7 +42,7 @@ export async function TestimonialSubmission(state: testimonialSubmissionFormStat
 export async function TestimonialUserAddition(state: testimonialUserAdditionFormState, formData:FormData){
     const validSubmission = testimonialUserAdditionSchema.safeParse(
     {
-        addedUsers: formData.get('addedUsers'),
+        addedUsers: formData.getAll('addedUsers'),
     
     }
 )
